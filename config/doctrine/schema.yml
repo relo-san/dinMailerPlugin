@@ -1,0 +1,96 @@
+
+# This file is part of the dinMailerPlugin package.
+# (c) DineCat, 2010 http://dinecat.com/
+#
+# For the full copyright and license information, please view the LICENSE file,
+# that was distributed with this package, or see http://www.dinecat.com/din/license.html
+
+# Plugin schema file for Doctrine
+#
+# @package     dinMailerPlugin
+# @subpackage  config.doctrine
+# @author      Nicolay N. Zyk <relo.san@gmail.com>
+
+#DinMailerQueue
+DinMailerQueue:
+
+    columns:
+        id:                 { type: 'integer(4)', primary: true, autoincrement: true }
+        sender_id:          { type: 'integer(4)' }
+        recipient_id:       { type: 'integer(4)' }
+        status:             { type: 'integer(1)', notnull: true, default: '1' }
+        priority:           { type: 'integer(1)', notnull: true, default: '1' }
+        resend:             { type: 'integer(2)', notnull: true, default: '0' }
+        created_at:         { type: 'timestamp' }
+        send_from:          { type: 'timestamp' }
+        sender_email:       { type: 'string(255)' }
+        sender_name:        { type: 'string(255)' }
+        sender_reply:       { type: 'string(255)' }
+        email:              { type: 'string(255)' }
+        name:               { type: 'string(255)' }
+        subject:            { type: 'string(255)' }
+        body:               { type: 'clob' }
+        altbody:            { type: 'clob' }
+        attach:             { type: 'clob' }
+
+    indexes:
+        status:             { fields: ['status'] }
+        priority:           { fields: ['priority'] }
+
+    relations:
+        DinSender:
+            class:          'DinUser'
+            local:          'sender_id'
+            foreign:        'id'
+            type:           'one'
+            foreignType:    'many'
+            alias:          'Sender'
+            foreignAlias:   'SendedMails'
+            onDelete:       'SET NULL'
+        DinStaticCategory:
+            class:          'DinUser'
+            local:          'recipient_id'
+            foreign:        'id'
+            type:           'one'
+            foreignType:    'many'
+            alias:          'Recipient'
+            foreignAlias:   'ReceivedMails'
+            onDelete:       'SET NULL'
+
+
+#DinMailerTemplate
+DinMailerTemplate:
+
+    actAs:
+        I18n:
+            fields:         ['title', 'description', 'sender_name', 'subject', 'body', 'altbody', 'attach']
+
+    columns:
+        id:                 { type: 'integer(4)', primary: true, autoincrement: true }
+        is_enabled:         { type: 'boolean', notnull: true, default: false }
+        sender_id:          { type: 'integer(4)' }
+        title:              { type: 'string(250)', fixed: true }
+        description:        { type: 'clob(65532)' }
+        sender_email:       { type: 'string(255)' }
+        sender_name:        { type: 'string(255)' }
+        sender_reply:       { type: 'string(255)' }
+        subject:            { type: 'string(255)' }
+        body:               { type: 'clob' }
+        altbody:            { type: 'clob' }
+        attach:             { type: 'clob' }
+        sequence:           { type: 'integer(4)' }
+
+    indexes:
+        enabled:            { fields: ['is_enabled'] }
+
+    relations:
+        DinStaticCategory:
+            local:          'category_id'
+            foreign:        'id'
+            type:           'one'
+            foreignType:    'many'
+            alias:          'Category'
+            foreignAlias:   'Pages'
+            onDelete:       'CASCADE'
+
+#EOF
