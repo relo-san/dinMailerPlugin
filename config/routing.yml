@@ -1,0 +1,33 @@
+
+# This file is part of the dinMailerPlugin package.
+# (c) DineCat, 2010 http://dinecat.com/
+#
+# For the full copyright and license information, please view the LICENSE file,
+# that was distributed with this package, or see http://www.dinecat.com/din/license.html
+
+# dinMailerPlugin routing configuration
+#
+# @package     dinMailerPlugin
+# @subpackage  config
+# @author      Nicolay N. Zyk <relo.san@gmail.com>
+
+din_mailer_template_admin:
+    class:                      'sfDoctrineRouteCollection'
+    options:
+        model:                  'DinMailerTemplate'
+        module:                 'dinMailerTemplateAdmin'
+        prefix_path:            '/adm/mailer/templates'
+        column:                 'id'
+        with_wildcard_routes:   true
+
+din_mailer_queue_admin:
+    class:                      'sfDoctrineRouteCollection'
+    options:
+        actions:                ['list', 'delete']
+        model:                  'DinMailerQueue'
+        module:                 'dinMailerQueueAdmin'
+        prefix_path:            '/adm/mailer/queues'
+        column:                 'id'
+        with_wildcard_routes:   true
+
+#EOF

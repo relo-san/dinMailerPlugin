@@ -18,8 +18,8 @@ DinMailerQueue:
         id:                 { type: 'integer(4)', primary: true, autoincrement: true }
         sender_id:          { type: 'integer(4)' }
         recipient_id:       { type: 'integer(4)' }
-        status:             { type: 'integer(1)', notnull: true, default: '1' }
-        priority:           { type: 'integer(1)', notnull: true, default: '1' }
+        state_id:           { type: 'integer(1)', notnull: true, default: '1' }
+        priority_id:        { type: 'integer(1)', notnull: true, default: '1' }
         resend:             { type: 'integer(2)', notnull: true, default: '0' }
         created_at:         { type: 'timestamp' }
         send_from:          { type: 'timestamp' }
@@ -34,12 +34,12 @@ DinMailerQueue:
         attach:             { type: 'clob' }
 
     indexes:
-        status:             { fields: ['status'] }
-        priority:           { fields: ['priority'] }
+        state:              { fields: ['state_id'] }
+        priority:           { fields: ['priority_id'] }
 
     relations:
-        DinSender:
-            class:          'DinUser'
+        IfsmSender:
+            class:          'IfsmUser'
             local:          'sender_id'
             foreign:        'id'
             type:           'one'
@@ -47,8 +47,8 @@ DinMailerQueue:
             alias:          'Sender'
             foreignAlias:   'SendedMails'
             onDelete:       'SET NULL'
-        DinStaticCategory:
-            class:          'DinUser'
+        IfsmRecipient:
+            class:          'IfsmUser'
             local:          'recipient_id'
             foreign:        'id'
             type:           'one'
@@ -69,7 +69,7 @@ DinMailerTemplate:
         id:                 { type: 'integer(4)', primary: true, autoincrement: true }
         is_enabled:         { type: 'boolean', notnull: true, default: false }
         sender_id:          { type: 'integer(4)' }
-        title:              { type: 'string(250)', fixed: true }
+        title:              { type: 'string(250)' }
         description:        { type: 'clob(65532)' }
         sender_email:       { type: 'string(255)' }
         sender_name:        { type: 'string(255)' }
